@@ -5,11 +5,6 @@ class UsersController < ApplicationController
     render plain: User.order(:id).map { |user| user.to_pleasant_string }.join("\n")
   end
 
-  def show
-    id = params[:id]
-    render plain: User.find(id).to_pleasant_string
-  end
-
   def create
     name = params[:name]
     email = params[:email]
@@ -20,5 +15,10 @@ class UsersController < ApplicationController
       password: password,
     )
     render plain: "new user created with #{newuser.id}"
+  end
+
+  def login
+    user = User.where("email=? and password=?", params[:email], params[:password])
+    render plain: (user.length == 0) ? "False" : "True"
   end
 end
